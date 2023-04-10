@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Get the most recent invalid command from the shell history
+invalid_command=$(history | tail -n 2 | head -n 1 | sed -e 's/^[[:space:]]*[0-9]*[[:space:]]*//')
+
+# Define a dictionary of common typos and their corrections
+declare -A typo_corrections=(
+  [칟ㅁㄱ]="clear"
+  # Add more typo corrections as needed
+)
+
+# If the most recent command is in the typo correction dictionary, correct it
+if [[ ${typo_corrections[$invalid_command]} ]]; then
+  corrected_command=${typo_corrections[$invalid_command]}
+  echo "Correcting '$invalid_command' to '$corrected_command'"
+  eval "$corrected_command"
+else
+  echo "No correction found for '$invalid_command'"
+fi
